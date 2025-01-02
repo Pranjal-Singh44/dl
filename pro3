@@ -7,26 +7,25 @@ from tensorflow.keras.utils import to_categorical
 (train_data, train_labels), (test_data, test_labels) = reuters.load_data(num_words=10000)
 
 def vectorize_sequences(sequences, dimension=10000):
-    results = np.zeros((len(sequences), dimension))  # Create a zero matrix of shape (num_samples, dimension)
+    results = np.zeros((len(sequences), dimension))  
     for i, sequence in enumerate(sequences):
-        results[i, sequence] = 1  # Set index positions corresponding to words in the sequence to 1
-    return results
+        results[i, sequence] = 1  
 
-x_train = vectorize_sequences(train_data)  # Vectorized training data
-x_test = vectorize_sequences(test_data)    # Vectorized testing data
+x_train = vectorize_sequences(train_data) 
+x_test = vectorize_sequences(test_data)   
 
 y_train = to_categorical(train_labels)
 y_test = to_categorical(test_labels)
 
 model = tf.keras.Sequential([
-    layers.Dense(64, activation='relu', input_shape=(10000,)),  # Input layer: Dense layer with 64 units, ReLU activation, input shape matching the vectorized data
-    layers.Dense(64, activation='relu'),  # Hidden layer: Another Dense layer with 64 units and ReLU activation
-    layers.Dense(46, activation='softmax')  # Output layer: Dense layer with 46 units (one for each class) and softmax activation
+    layers.Dense(64, activation='relu', input_shape=(10000,)),  
+    layers.Dense(64, activation='relu'),  
+    layers.Dense(46, activation='softmax')  
 ])
 
-model.compile(optimizer='rmsprop',  # Optimizer: RMSprop, a gradient descent optimization algorithm
-              loss='categorical_crossentropy',  # Cross-entropy loss for multi-class classification
-              metrics=['accuracy'])  # Use accuracy as the evaluation metric
+model.compile(optimizer='rmsprop',  
+              loss='categorical_crossentropy',  
+              metrics=['accuracy'])  
 
 history = model.fit(x_train, y_train, epochs=10, batch_size=512, validation_split=0.2)
 
